@@ -4,6 +4,8 @@ from .single import Attention
 
 item_eigen = torch.load('item_eigen.pt')
 user_eigen = torch.load('user_eigen.pt')
+user_latent_sim = torch.load('user_latent_sim.pt')
+item_latent_sim = torch.load('item_latent_sim.pt')
 class MultiHeadedAttention(nn.Module):
     """
     Take in model size and number of heads.
@@ -12,8 +14,21 @@ class MultiHeadedAttention(nn.Module):
     def __init__(self, h, d_model, dropout=0.1):
         super().__init__()
         assert d_model % h == 0
-        item_eigen = torch.load('item_eigen.pt')
-        user_eigen = torch.load('user_eigen.pt')
+
+        
+        # self.item_eigen = torch.load('weight_initializer/vanila/weight_2/item_eigen.pt')
+        # self.user_eigen = torch.load('weight_initializer/vanila/weight_2/user_eigen.pt')
+        # self.user_latent_sim = torch.load('weight_initializer/vanila/weight_2/user_latent_sim.pt')
+        # self.item_latent_sim = torch.load('weight_initializer/vanila/weight_2/item_latent_sim.pt')
+        # self.item_eigen = torch.load('item_eigen.pt')
+        # self.user_eigen = torch.load('user_eigen.pt')
+        # self.user_latent_sim = torch.load('user_latent_sim.pt')
+        # self.item_latent_sim = torch.load('item_latent_sim.pt')
+        self.user_eigen = user_eigen
+        self.item_eigen = item_eigen
+        self.user_latent_sim = user_latent_sim
+        self.item_latent_sim = item_latent_sim
+
 
         # We assume d_v always equals d_k
         self.d_k = d_model // h
@@ -21,9 +36,10 @@ class MultiHeadedAttention(nn.Module):
 
         self.linear_layers = nn.ModuleList([nn.Linear(d_model, d_model) for _ in range(3)])
         
-        self.query_weight = user_eigen
-        self.key_weight = item_eigen
-        self.value_weight = torch.matmul(user_eigen.transpose(0,1), item_eigen)
+        self.query_weight = self.user_eigen
+        self.key_weight = self.item_eigen
+        # self.value_weight = torch.matmul(user_eigen.transpose(0,1), item_eigen)
+        self.value_weight = self.item_latent_sim
         
         with torch.no_grad():
             self.linear_layers[0].weight.copy_(self.query_weight)
@@ -50,3 +66,4 @@ class MultiHeadedAttention(nn.Module):
         x = x.transpose(1, 2).contiguous().view(batch_size, -1, self.h * self.d_k)
 
         return self.output_linear(x)
+MultiHeadedAttention(4,256)
