@@ -1,13 +1,13 @@
 <<<<<<< HEAD
 # Introduction
 
-This repository implements models from the following two papers:
+This repository implements models from the following below paper and github:
 
 > **BERT4Rec: Sequential Recommendation with BERT (Sun et al.)**  
 
-> **Variational Autoencoders for Collaborative Filtering (Liang et al.)**  
+> **https://github.com/jaywonchung/BERT4Rec-VAE-Pytorc**
 
-and lets you train them on MovieLens-1m and MovieLens-20m.
+and lets you train them on MovieLens-1m and MovieLens-20m
 
 # Usage
 
@@ -23,31 +23,11 @@ After training, it also asks you whether to run test set evaluation on the train
 
 ```bash
 python main.py --template train_bert
-```
-
-## DAE
-
-```bash
-python main.py --template train_dae
-```
-
-## VAE
-
-### Search for the optimal beta
-
-```bash
-python main.py --template train_vae_search_beta
-```
 
 ### Use the found optimal beta
 
 First, **fill out the optimal beta value in `templates.py`**. Then, run the following.
 
-``` bash
-python main.py --template train_vae_give_beta
-```
-
-<img src=Images/vae_tensorboard.png width=800>
 
 The `Best_beta` plot will help you determine the optimal beta value. It can be seen that the optimal beta value is 0.285.
 
@@ -73,13 +53,7 @@ The `NDCG_10` metric shows that the improvement claimed by the paper has been re
 
 Numbers under model names indicate the number of hidden layers.
 
-## MovieLens-1m
 
-<img src=Images/ML1m-results.png>
-
-## MovieLens-20m
-
-<img src=Images/ML20m-results.png>
 =======
 # BERT4Rec_plus
 [Capstone Design] BERT4Rec++ 
