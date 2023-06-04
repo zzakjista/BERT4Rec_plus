@@ -1,7 +1,7 @@
 import torch.nn as nn
 from .token import TokenEmbedding
 from .position import PositionalEmbedding
-
+from hyptorch.nn import HypLinear
 
 class BERTEmbedding(nn.Module):
     """
@@ -25,7 +25,10 @@ class BERTEmbedding(nn.Module):
         # self.segment = SegmentEmbedding(embed_size=self.token.embedding_dim)
         self.dropout = nn.Dropout(p=dropout)
         self.embed_size = embed_size
-
+        self.c = 1
+        self.hyper_embed = HypLinear(self.embed_size, self.embed_size, self.c)
+        
     def forward(self, sequence):
         x = self.token(sequence) + self.position(sequence)  # + self.segment(segment_label)
+        x = self.hyper_embed(x)
         return self.dropout(x)
